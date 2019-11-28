@@ -1,16 +1,24 @@
 <template>
   <v-list nav>
-    <v-subheader>Calls</v-subheader>
-    <v-list-item-group v-model="selectedCall" color="primary">
-      <v-list-item v-for="(call, i) in calls" :key="i">
+    <v-list-group
+      v-for="(batch, i) in batches"
+      :key="i"
+      v-model="batch.selected"
+    >
+      <template v-slot:activator>
         <v-list-item-content>
-          <v-list-item-title v-html="call.startedDateTime"></v-list-item-title>
-          <v-list-item-subtitle
-            v-html="call.startedDateTime"
-          ></v-list-item-subtitle>
+          <v-list-item-title
+            v-text="batch.source.startedDateTime"
+          ></v-list-item-title>
+        </v-list-item-content>
+      </template>
+
+      <v-list-item v-for="request in batch.calls.requests" :key="request.url">
+        <v-list-item-content>
+          <v-list-item-title v-text="request.url"></v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-    </v-list-item-group>
+    </v-list-group>
   </v-list>
 </template>
 
@@ -18,7 +26,7 @@
 export default {
   name: "CallsList",
   props: {
-    calls: {
+    batches: {
       type: Array
     }
   },
